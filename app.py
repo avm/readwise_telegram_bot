@@ -78,8 +78,8 @@ async def send_to_readwise(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Message from %s was highlighted with note: %s" % (from_who, note_txt))
 
 @restricted
-async def prepare_reader(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Sending data to Readwise Reader...")
+async def prepare_readwise(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Sending data to Readwise...")
     return FORWARD
 
 @restricted
@@ -110,9 +110,9 @@ if __name__ == '__main__':
     #register commands
 
     conv_handler_reader = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex("^r$"), prepare_reader)],
+        entry_points=[MessageHandler(filters.Regex("^r$"), prepare_readwise)],
         states={
-            FORWARD: [MessageHandler((filters.TEXT | filters.ATTACHMENT | filters.PHOTO) & ~filters.COMMAND, send_to_reader)],
+            FORWARD: [MessageHandler((filters.TEXT | filters.ATTACHMENT | filters.PHOTO) & ~filters.COMMAND, send_to_readwise)],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     
     application.add_handler(conv_handler_reader)
     application.add_handler(CommandHandler('start', start))
-    application.add_handler(MessageHandler((filters.TEXT | filters.ATTACHMENT | filters.PHOTO) & ~filters.COMMAND, send_to_readwise))
+    application.add_handler(MessageHandler((filters.TEXT | filters.ATTACHMENT | filters.PHOTO) & ~filters.COMMAND, send_to_reader))
     
     #run bot
     application.run_polling()
