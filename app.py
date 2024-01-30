@@ -28,7 +28,7 @@ def restricted(func):
     @wraps(func)
     async def wrapped(update, context, *args, **kwargs):
         user_id = update.effective_user.id
-        if user_id == ADMIN:
+        if user_id != ADMIN:
             print(f"Unauthorized access denied for {user_id}.")
             return
         return await func(update, context, *args, **kwargs)
